@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.stopwatch {
+  text-align: center;
+}
+
+h1 {
+  font-size: 3em;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+}
+  </style>
+  <script>
+    let timer;
+let running = false;
+let startTime;
+let elapsedTime = 0;
+
+function startStop() {
+  if (running) {
+    clearInterval(timer);
+    running = false;
+    document.getElementById("startStopButton").textContent = "Start";
+  } else {
+    startTime = Date.now() - elapsedTime;
+    timer = setInterval(updateDisplay, 10);
+    running = true;
+    document.getElementById("startStopButton").textContent = "Stop";
+  }
+}
+
+function updateDisplay() {
+  let now = Date.now();
+  elapsedTime = now - startTime;
+  let formattedTime = formatTime(elapsedTime);
+  document.getElementById("display").textContent = formattedTime;
+}
+
+function formatTime(time) {
+  let hours = Math.floor(time / 3600000);
+  let minutes = Math.floor((time % 3600000) / 60000);
+  let seconds = Math.floor((time % 60000) / 1000);
+  let milliseconds = Math.floor((time % 1000) / 10);
+
+  return (
+    String(hours).padStart(2, "0") +
+    ":" +
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(seconds).padStart(2, "0") +
+    "." +
+    String(milliseconds).padStart(2, "0")
+  );
+}
+
+function reset() {
+  clearInterval(timer);
+  running = false;
+  elapsedTime = 0;
+  document.getElementById("display").textContent = "00:00:00";
+  document.getElementById("startStopButton").textContent = "Start";
+}
+  </script>
+</head>
+<body>
+  <div class="stopwatch">
+    <h1 id="display">00:00:00</h1>
+    <button id="startStopButton" onclick="startStop()">Start</button>
+    <button onclick="reset()">Reset</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
